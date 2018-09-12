@@ -49,6 +49,9 @@ module.exports = {
       files: [{
         destination: 'properties.json',
         format: 'json'
+      },{
+        destination: 'index.html',
+        template: 'static-style-guide/index.html'
       }]
     }
   }

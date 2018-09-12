@@ -1,12 +1,12 @@
 const core = require('./core');
 
 const background = {
-  base: core.white,
-  alt: core.grey["10"],
+  base: "#ffffff",
+  alt: core.grey["20"],
 }
 
 // Bypassing Style Dictionary's reference resolution completely.
-// This works:
+// This works (kinda):
 background.disabled = background.alt;
 background.low_priority = background.disabled;
 // The only issue is that because you are bypassing the reference
