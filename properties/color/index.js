@@ -4,5 +4,6 @@ module.exports = {
   core: require('./core'),
   brand: require('./brand'),
   font: require('./font'),
-  background: require('./background')
+  background: require('./background'),
+  border: require('./border')
 }

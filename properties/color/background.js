@@ -1,8 +1,9 @@
 const core = require('./core');
 
 const background = {
-  base: "#ffffff",
+  base: { value: "#ffffff" },
   alt: core.grey["20"],
+  link: { value: "{color.brand.primary.base.value}" }
 }
 
 // Bypassing Style Dictionary's reference resolution completely.

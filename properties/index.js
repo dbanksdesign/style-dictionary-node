@@ -1,3 +1,4 @@
 module.exports = {
-  color: require('./color')
+  color: require('./color'),
+  size: require('./size')
 }

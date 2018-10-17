@@ -1,11 +1,48 @@
 const StyleDictionary = require('style-dictionary');
+const _ = require('lodash');
 const properties = require('./properties');
 
 const buildPath = 'dist/';
 
+// I don't know how this works, but apparently you can
+// add custom transforms and formats like you normally would
+// and reference them in the config below.
+StyleDictionary.registerTransform({
+  name: 'test',
+  type: 'name',
+  transformer: function(prop) {
+    return prop.path.splice(2).join(' ')
+  }
+});
+
 module.exports = {
-  properties: properties,
+  source: ['properties/index.js', 'components/index.js'],
+  // If you don't want to call the registerTransform method a bunch of times
+  // you can just override the whole transform object. This works because
+  // in the .extend method, it actually copies everything in the config
+  // to itself, so you can override things. It's also doing a deep merge
+  // so you don't have to worry about using Object.assign to not accidentally
+  // null out things.
+  transform: {
+    'customTransform': {
+      type: 'value',
+      transformer: (prop) => 'hello'
+    }
+  },
+  // You can also bypass the
+  // merging of files Style Dictionary does by adding a 'properties' object
+  // directly like this:
+  //
+  // properties: properties,
   platforms: {
+    custom: {
+      transforms: ['customTransform', 'test'],
+      buildPath: buildPath,
+      files: [{
+        destination: 'custom.txt',
+        format: 'scss/variables'
+      }]
+    },
     css: {
       transformGroup: 'css',
       buildPath: buildPath,
@@ -33,7 +70,7 @@ module.exports = {
     },
 
     js: {
-      transformGroup: 'js',
+      transforms: StyleDictionary.transformGroup.js.concat('test'),
       buildPath: buildPath,
       // Holy fuck this works:
       files: Object.keys(properties.color).map((colorType) => ({
@@ -42,6 +79,17 @@ module.exports = {
         filter: (prop) => prop.attributes.type === colorType
       }))
     },
+
+    // componentJs: {
+    //   transformGroup: 'js',
+    //   buildPath: buildPath,
+    //   // Holy fuck this works:
+    //   files: Object.keys(properties.component).map((componentName) => ({
+    //     destination: `${componentName}.js`,
+    //     format: 'javascript/es6',
+    //     filter: (prop) => prop.attributes.type === componentName
+    //   }))
+    // },
 
     json: {
       transformGroup: 'js',
