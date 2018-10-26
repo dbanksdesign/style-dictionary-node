@@ -2,7 +2,7 @@ const StyleDictionary = require('style-dictionary');
 const _ = require('lodash');
 const properties = require('./properties');
 
-const buildPath = 'dist/';
+const buildPath = 'build/';
 
 // I don't know how this works, but apparently you can
 // add custom transforms and formats like you normally would
@@ -29,6 +29,13 @@ module.exports = {
       transformer: (prop) => 'hello'
     }
   },
+  // Same with formats, you can now just write them directly to this config
+  // object. The name of the format is the key.
+  format: {
+    myFormat: (dictionary, platform) => {
+      return dictionary.allProperties.map(prop => `${prop.name}: ${prop.value}`).join('\n');
+    }
+  },
   // You can also bypass the
   // merging of files Style Dictionary does by adding a 'properties' object
   // directly like this:
@@ -39,8 +46,8 @@ module.exports = {
       transforms: ['customTransform', 'test'],
       buildPath: buildPath,
       files: [{
-        destination: 'custom.txt',
-        format: 'scss/variables'
+        destination: 'variables.txt',
+        format: 'myFormat'
       }]
     },
     css: {
